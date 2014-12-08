@@ -7,7 +7,12 @@ import praw
 import Tools
 import os
 os.environ.get('C_FORCE_ROOT', True)
-app = Celery('Reddit',backend='amqp', broker='amqp://148.88.19.38//')
+app = Celery()
+app.config_from_object({
+    'BROKER_URL': 'amqp://guest:guest@148.88.19.38/',
+    'CELERY_RESULT_BACKEND': 'amqp',
+    'CELERYD_POOL_RESTARTS': True,  # Required for /worker/pool/restart API
+})
 
 @app.task(ignore_result=True)
 def mineThread(value):
