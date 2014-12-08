@@ -5,14 +5,10 @@ from DB import DB
 import datetime
 import praw
 import Tools
-import os
-os.environ.get('C_FORCE_ROOT', True)
+
 app = Celery()
-app.config_from_object({
-    'BROKER_URL': 'amqp://guest:guest@148.88.19.38/',
-    'CELERY_RESULT_BACKEND': 'amqp',
-    'CELERYD_POOL_RESTARTS': True,  # Required for /worker/pool/restart API
-})
+app.config_from_object('celeryconfig')
+
 
 @app.task(ignore_result=True)
 def mineThread(value):
@@ -33,3 +29,6 @@ def mineThread(value):
     except Exception,e:
         print e
         print "{0} : Unexpected error Comment.py-download: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], value)
+
+if __name__ == '__main__':
+    app.worker_main()
