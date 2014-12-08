@@ -16,7 +16,7 @@ class DB:
         self.threads = self.db.threads
 
         #Store for all the comments that are mined
-        self.comments = self.db.comments
+        self.comments = self.db.commentsTest
         self.comments.ensure_index('id', unique=True)
 
         #list of history threads mined
