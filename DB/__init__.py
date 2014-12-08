@@ -5,9 +5,9 @@ from pprint import pprint
 
 
 class DB:
-    def __init__(self, address):
+    def __init__(self):
 
-        self.address = address
+        self.address = ""
 
         self.client = MongoClient("148.88.19.38", 27017)
         self.db = self.client.reddit
