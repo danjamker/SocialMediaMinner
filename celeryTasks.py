@@ -2,7 +2,7 @@ __author__ = 'danielkershaw'
 from celery import Celery
 from DB import DB
 
-import datetime
+from datetime import datetime
 import praw
 import Tools
 
