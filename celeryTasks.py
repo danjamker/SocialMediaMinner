@@ -5,6 +5,7 @@ from DB import DB
 from datetime import datetime
 import praw
 import Tools
+import sys
 
 app = Celery()
 app.config_from_object('celeryconfig')
