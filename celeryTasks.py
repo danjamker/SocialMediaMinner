@@ -30,6 +30,6 @@ def mineThread(value):
     except Exception,e:
         print e
         print "{0} : Unexpected error Comment.py-download: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], value)
-
+        raise
 if __name__ == '__main__':
     app.worker_main()
