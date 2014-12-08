@@ -26,8 +26,8 @@ def serlizeComment(comment):
     tmp = {}
     tmp["approved_by"]= "{0}".format(comment.approved_by)
     tmp["author"] = "{0}".format(comment.author)
-    tmp["author_flair_css_class"] = "{0}".format(comment.author_flair_css_class)
-    tmp["author_flair_text"] = "{0}".format(comment.author_flair_text.encode('utf-8').strip())
+    #tmp["author_flair_css_class"] = "{0}".format(comment.author_flair_css_class)
+    #tmp["author_flair_text"] = "{0}".format(comment.author_flair_text.encode('utf-8').strip())
     tmp["banned_by"]=comment.banned_by
     tmp["body"]=comment.body
     tmp["body_html"]=comment.body_html
