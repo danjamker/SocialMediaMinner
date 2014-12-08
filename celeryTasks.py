@@ -6,6 +6,7 @@ from datetime import datetime
 import praw
 import Tools
 import sys
+import urllib2
 
 app = Celery()
 app.config_from_object('celeryconfig')
@@ -27,6 +28,8 @@ def mineThread(value):
             tmp = Tools.serlizeComment(comment)
             db.insert_comment(tmp)
         db.remove_from_queue(value)
+    except urllib2.HTTPError, err:
+        mineThread.retry(args=[value], exc=err, countdown=30)
     except Exception,e:
         print e
         print "{0} : Unexpected error Comment.py-download: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], value)

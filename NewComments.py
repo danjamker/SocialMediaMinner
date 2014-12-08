@@ -4,6 +4,7 @@ import Tools
 from datetime import datetime
 from DB import DB
 from celeryTasks import mineThread
+import urllib2
 
 class main:
 
