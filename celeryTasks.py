@@ -24,6 +24,7 @@ def mineThread(value):
         flat_comments = praw.helpers.flatten_tree(submission.comments)
         for comment in flat_comments:
             tmp = Tools.serlizeComment(comment)
+            print tmp
             db.insert_comment(tmp)
         db.remove_from_queue(value)
     except Exception,e:
