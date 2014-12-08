@@ -5,7 +5,8 @@ from DB import DB
 import datetime
 import praw
 import Tools
-
+import os
+os.environ.get('C_FORCE_ROOT', True)
 app = Celery('Reddit',backend='amqp', broker='amqp://148.88.19.38//')
 
 @app.task(ignore_result=True)
