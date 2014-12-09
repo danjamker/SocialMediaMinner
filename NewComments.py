@@ -24,8 +24,7 @@ class main:
                     tmp = Tools.serilize(comment.submission)
                     print tmp["id"]
                     self.db.insert_stream_thread(tmp)
-                    if not self.db.is_in_mq(tmp["id"]):
-                        mineThread.delay(tmp["id"])
+                    mineThread.delay(tmp["id"])
         except Exception as e:
             print "{0} : Unexpected error GetAllComment.py-start: {1}".format(datetime.now().strftime("%c"), e.args)
 
