@@ -82,12 +82,15 @@ class DB:
     def insert_stream_thread(self, value):
         try:
             print "{0} : insert_stream_thread {1}".format(datetime.now().strftime("%c"), value["id"])
-            if not self.is_in_mq(value["id"]):
+            tmp = self.is_in_mq(value["id"])
+            if not tmp:
                 self.add_to_queue(value["id"])
             tmptmp = self.stream_threads.update({'id': value["id"]}, value, upsert=True)
+            return tmp
         except Exception as x:
             print "{0} : Unexpected error DB.py-insert_histroic_thread: {1} id: {2}".format(
                 datetime.now().strftime("%c"), x.args, value["id"])
+            return false
 
     def add_to_queue(self, thread_id):
         try:
