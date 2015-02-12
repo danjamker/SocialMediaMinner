@@ -5,7 +5,7 @@ from pprint import pprint
 
 
 class DB:
-    def __init__(self):
+    def __init__(self, database):
 
         self.client = MongoClient("148.88.19.38", 27017)
         self.db = self.client.reddit
@@ -67,7 +67,6 @@ class DB:
             print "{0} : Unexpected error DB.py-insert_thread: {1} id: {2}".format(datetime.now().strftime("%c"),
                                                                                    x.args, value["id"])
 
-
     def insert_histroic_thread(self, value):
         try:
             print "{0} : insert_histroic_thread {1}".format(datetime.now().strftime("%c"), value["id"])
@@ -90,7 +89,7 @@ class DB:
         except Exception as x:
             print "{0} : Unexpected error DB.py-insert_histroic_thread: {1} id: {2}".format(
                 datetime.now().strftime("%c"), x.args, value["id"])
-            return false
+            return False
 
     def add_to_queue(self, thread_id):
         try:

@@ -1,12 +1,14 @@
 __author__ = 'danielkershaw'
 from celery import Celery
 from DB import DB
+from ChanDB import ChanDB
 
 from datetime import datetime
 import praw
 import Tools
 import sys
 import urllib2
+import urllib, json
 
 app = Celery()
 app.config_from_object('celeryconfig')
@@ -30,9 +32,29 @@ def mineThread(value):
         db.remove_from_queue(value)
     except urllib2.HTTPError, err:
         mineThread.retry(args=[value], exc=err, countdown=30)
-    except Exception,e:
+    except Exception,   e:
         print e
         print "{0} : Unexpected error Comment.py-download: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], value)
         raise
+
+@app.task(ignore_result=True)
+def mineChan(self, board, thread):
+    try:
+        db = ChanDB()
+
+        url = "https://a.4cdn.org/"+str(board)+"/thread/"+str(thread)+".json"
+        response = urllib.urlopen(url);
+        data = json.loads(response.read())
+
+        # information from the OP
+        for pp in data["posts"]:
+            pp["lancs_id"] = str(board)+":"+str(thread)+":"+str(pp["no"])
+            db.insert_post(pp)
+        db.remove_from_queue(str(thread)+":"+str(board))
+    except Exception, e:
+        print e
+        print "{0} : Unexpected error celeryTasks.py-mineChan: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], board+":"+thread)
+        raise
+
 if __name__ == '__main__':
     app.worker_main()
