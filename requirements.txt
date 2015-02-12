@@ -2,3 +2,4 @@ pymongo
 praw
 supervisor
 flower
+basc-py4chan
