@@ -2,7 +2,7 @@ __author__ = 'danielkershaw'
 from celery import Celery
 from DB import DB
 from ChanDB import ChanDB
-
+import celeryconfig
 from datetime import datetime
 import praw
 import Tools
@@ -11,7 +11,7 @@ import urllib2
 import urllib, json
 
 app = Celery()
-app.config_from_object('celeryconfig')
+app.config_from_object(celeryconfig)
 
 
 @app.task(ignore_result=True)
@@ -38,7 +38,7 @@ def mineThread(value):
         raise
 
 @app.task(ignore_result=True)
-def mineChan(self, board, thread):
+def mineChan(board, thread):
     try:
         db = ChanDB()
 

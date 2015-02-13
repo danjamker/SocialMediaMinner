@@ -6,7 +6,6 @@ import basc_py4chan
 import urllib, json
 from celeryTasks import mineChan
 import time
-
 class main:
 
     def __init__(self):
@@ -28,14 +27,11 @@ class main:
                             print "Adding!!!!!!!"
                             mineChan.delay(b["board"], tid)
 
-
-
         except Exception as e:
             print "{0} : Unexpected error GetAllComment.py-start: {1}".format(datetime.now().strftime("%c"), e.args)
 
     def stop(self):
         self.run = False
-
 
 if __name__ == "__main__":
     main().start()
