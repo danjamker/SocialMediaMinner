@@ -9,7 +9,7 @@ import sys
 import urllib2
 import urllib, json
 
-app = Celery('tasks', backend='mongodb://148.88.19.38:27017/', broker='amqp://guest:guest@148.88.19.38/')
+app = Celery('tasks', backend='mongodb://148.88.19.38:27017/celery', broker='amqp://guest:guest@148.88.19.38/')
 app.config_from_object('celeryconfig')
 
 
