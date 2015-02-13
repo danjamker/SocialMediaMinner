@@ -13,7 +13,7 @@ app = Celery('celeryTasks', backend='mongodb://148.88.19.38:27017/celery', broke
 app.config_from_object('celeryconfig')
 
 
-@app.task()
+@app.task(ignore_result=True)
 def mineThread(value):
     db = DB()
     try:
@@ -36,7 +36,7 @@ def mineThread(value):
         print "{0} : Unexpected error Comment.py-download: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], value)
         raise
 
-@app.task()
+@app.task(ignore_result=True)
 def mineChan(board, thread):
     try:
         db = ChanDB()
