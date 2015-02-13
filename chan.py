@@ -5,6 +5,8 @@ from ChanDB import ChanDB
 import basc_py4chan
 import urllib, json
 from celeryTasks import mineChan
+import time
+
 class main:
 
     def __init__(self):
@@ -18,6 +20,7 @@ class main:
             data = json.loads(response.read())
             while self.run:
                 for b in data["boards"]:
+                    time.sleep(1)
                     board = basc_py4chan.Board(b["board"])
                     thread_ids = board.get_all_thread_ids()
                     for tid in thread_ids:
