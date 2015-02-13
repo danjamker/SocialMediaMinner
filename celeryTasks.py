@@ -2,7 +2,6 @@ __author__ = 'danielkershaw'
 from celery import Celery
 from DB import DB
 from ChanDB import ChanDB
-import celeryconfig
 from datetime import datetime
 import praw
 import Tools
@@ -10,8 +9,8 @@ import sys
 import urllib2
 import urllib, json
 
-app = Celery()
-app.config_from_object(celeryconfig)
+app = Celery('tasks', backend='mongodb://148.88.19.38:27017/', broker='amqp://guest:guest@148.88.19.38/')
+app.config_from_object('celeryconfig')
 
 
 @app.task(ignore_result=True)
