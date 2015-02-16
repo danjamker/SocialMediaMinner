@@ -10,7 +10,7 @@ import urllib2
 import urllib, json
 
 app = Celery('celeryTasks', backend='mongodb://148.88.19.38:27017/celery', broker='mongodb://148.88.19.38:27017/celery')
-app.config_from_object('celeryconfig')
+app.config_from_object('/code/celeryconfig')
 
 
 @app.task(ignore_result=True)
