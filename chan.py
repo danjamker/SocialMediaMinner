@@ -23,7 +23,7 @@ class main:
                     board = basc_py4chan.Board(b["board"])
                     thread_ids = board.get_all_thread_ids()
                     for tid in thread_ids:
-                        if self.db.insert_to_mq(str(tid)+":"+str(b["board"])) == False:
+                        if self.db.insert_to_mq(str(tid)+":"+str(b["board"])) == True:
                             print "Adding!!!!!!!"
                             mineChan.delay(b["board"], tid)
 

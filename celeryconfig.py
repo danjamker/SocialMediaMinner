@@ -1,4 +1,4 @@
-BROKER_URL = 'amqp://guest:guest@148.88.19.38/'
+BROKER_URL = 'mongodb://148.88.19.38:27017/celerycelery'
 
 CELERY_RESULT_BACKEND = 'mongodb://148.88.19.38:27017/'
 

@@ -48,6 +48,7 @@ class ChanDB:
 
     def remove_from_queue(self, thread_id):
         try:
+
             self.mq.remove({'id': thread_id})
         except Exception as x:
             print "{0} : Unexpected error DB.py-remove_from_queue: {1} id: {2}".format(datetime.now().strftime("%c"),

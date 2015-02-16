@@ -9,7 +9,7 @@ import sys
 import urllib2
 import urllib, json
 
-app = Celery('celeryTasks', backend='mongodb://148.88.19.38:27017/celery', broker='amqp://guest:guest@148.88.19.38/')
+app = Celery('celeryTasks', backend='mongodb://148.88.19.38:27017/celery', broker='mongodb://148.88.19.38:27017/celery')
 app.config_from_object('celeryconfig')
 
 
@@ -48,8 +48,12 @@ def mineChan(board, thread):
         # information from the OP
         for pp in data["posts"]:
             pp["lancs_id"] = str(board)+":"+str(thread)+":"+str(pp["no"])
+            print pp
             db.insert_post(pp)
+        print "{0} : Attempting to remove: {1} from MQ on mongo".format(datetime.now().strftime("%c"), str(thread)+":"+str(board))
+
         db.remove_from_queue(str(thread)+":"+str(board))
+
     except Exception, e:
         print e
         print "{0} : Unexpected error celeryTasks.py-mineChan: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], board+":"+thread)
