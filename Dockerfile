@@ -8,6 +8,7 @@ RUN easy_install pip
 RUN apt-get install -y python-setuptools
 RUN apt-get update && apt-get install -y curl lsb-release supervisor openssh-server
 RUN pip install requests
+RUN pip install Celery
 RUN service supervisor restart
 
 COPY . /code
