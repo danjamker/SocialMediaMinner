@@ -19,6 +19,6 @@ VOLUME ["/var/log/supervisord/"]
 RUN pip install -r requirements.txt
 RUN ls -l /code
 USER root
-RUN export C_FORCE_ROOT="true"
+ENV C_FORCE_ROOT "true"
 EXPOSE 22 80
 CMD ["/usr/bin/supervisord"]
