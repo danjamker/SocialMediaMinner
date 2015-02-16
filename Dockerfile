@@ -1,4 +1,5 @@
 FROM ubuntu:14.04
+MAINTAINER d.kershaw1@lancaster.ac.uk
 
 # Install Python Setuptools
 RUN apt-get install -y python-setuptools
@@ -10,15 +11,16 @@ RUN apt-get update && apt-get install -y curl lsb-release supervisor openssh-ser
 RUN pip install requests
 RUN pip install Celery
 RUN service supervisor restart
+RUN pip install -r requirements.txt
 
 COPY . /code
 WORKDIR /code
+
 RUN cp ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir /var/log/supervisord/
 VOLUME ["/var/log/supervisord/"]
-RUN pip install -r requirements.txt
-RUN ls -l /code
+
 USER root
 ENV C_FORCE_ROOT "true"
-EXPOSE 22 80
+EXPOSE 5555 5555
 CMD ["/usr/bin/supervisord"]
