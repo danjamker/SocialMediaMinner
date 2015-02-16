@@ -1,5 +1,6 @@
 pymongo
 praw
 supervisor
+Celery
 flower
 basc-py4chan
