@@ -7,7 +7,7 @@ from pprint import pprint
 class ChanDB:
     def __init__(self):
 
-        self.client = MongoClient("148.88.19.38", 27017)
+        self.client = MongoClient("scc-culture-slave1.lancs.ac.uk", 27017)
         self.db = self.client.chan
 
         #Store for all the comments that are mined

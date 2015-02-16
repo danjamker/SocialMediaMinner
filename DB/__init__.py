@@ -7,7 +7,7 @@ from pprint import pprint
 class DB:
     def __init__(self):
 
-        self.client = MongoClient("148.88.19.38", 27017)
+        self.client = MongoClient("scc-culture-slave1.lancs.ac.uk", 27017)
         self.db = self.client.reddit
 
         # Top 100 threads at the top of reddit and there indexes.
