@@ -16,7 +16,7 @@ WORKDIR /code
 RUN cp ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir /var/log/supervisord/
 VOLUME ["/var/log/supervisord/"]
-CMD pip install -r requirements.txt
+RUN pip install -r requirements.txt
 RUN ls -l /code
 USER root
 
