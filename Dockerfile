@@ -22,5 +22,4 @@ VOLUME ["/var/log/supervisord/"]
 
 USER root
 ENV C_FORCE_ROOT "true"
-EXPOSE 5555 5555
 CMD ["/usr/bin/supervisord"]
