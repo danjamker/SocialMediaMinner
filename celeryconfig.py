@@ -1,4 +1,4 @@
-BROKER_URL = 'mongodb://148.88.19.38:27017/celerycelery'
+BROKER_URL = 'mongodb://148.88.19.38:27017/celery'
 
 CELERY_RESULT_BACKEND = 'mongodb://148.88.19.38:27017/'
 
