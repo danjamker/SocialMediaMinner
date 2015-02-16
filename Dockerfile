@@ -1,6 +1,9 @@
 FROM ubuntu:14.04
 MAINTAINER d.kershaw1@lancaster.ac.uk
 
+COPY . /code
+WORKDIR /code
+
 # Install Python Setuptools
 RUN apt-get install -y python-setuptools
 
@@ -13,8 +16,7 @@ RUN pip install Celery
 RUN service supervisor restart
 RUN pip install -r requirements.txt
 
-COPY . /code
-WORKDIR /code
+
 
 RUN cp ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir /var/log/supervisord/
