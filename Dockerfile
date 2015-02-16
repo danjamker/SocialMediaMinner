@@ -12,7 +12,7 @@ RUN service supervisor restart
 
 COPY . /code
 WORKDIR /code
-RUN cp /supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN cp ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 CMD pip install -r requirements.txt
 
 EXPOSE 22 80
