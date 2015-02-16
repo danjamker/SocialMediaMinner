@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y curl lsb-release supervisor openssh-ser
 RUN pip install requests
 RUN pip install Celery
 RUN service supervisor restart
-
+RUN pip install supervisor-stdout
 COPY . /code
 WORKDIR /code
 RUN cp ./supervisord.conf /etc/supervisor/conf.d/supervisord.conf
