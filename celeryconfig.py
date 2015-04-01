@@ -1,6 +1,6 @@
-BROKER_URL = 'mongodb://scc-culture-slave1.lancs.ac.uk:27017/celery'
+BROKER_URL = 'amqp://guest:guest@148.88.19.38/'
 
-CELERY_RESULT_BACKEND = 'mongodb://scc-culture-slave1.lancs.ac.uk:27017/'
+CELERY_RESULT_BACKEND = 'mongodb://148.88.19.39:27017/'
 
 CELERY_MONGODB_BACKEND_SETTINGS = {
     'database': 'celery',
