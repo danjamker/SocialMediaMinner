@@ -9,7 +9,7 @@ import sys
 import urllib2
 import urllib, json
 
-app = Celery('celeryTasks', backend='mongodb://scc-culture-slave1.lancs.ac.uk:27017/celery', broker='mongodb://scc-culture-slave1.lancs.ac.uk:27017/celery')
+app = Celery('celeryTasks', backend='mongodb://scc-culture-slave1.lancs.ac.uk:27017/celery', broker='amqp://guest:guest@148.88.19.38/')
 
 @app.task(ignore_result=True)
 def mineThread(value):
