@@ -15,14 +15,14 @@ class DB:
 
         #Store for all the comments that are mined
         self.comments = self.db.comments
-        self.comments.ensure_index('id', unique=True)
+        self.comments.create_index('id', unique=True)
 
         #List of what currently in the messaging queue for comment mining
         self.mq = self.db.mq
 
         #list of history threads mined
         self.his_threads = self.db.his_threads
-        self.his_threads.ensure_index('id', unique=True)
+        self.his_threads.create_index('id', unique=True)
 
         #list of history threads mined
         self.stream_threads = self.db.stream_threads
@@ -82,7 +82,7 @@ class DB:
         try:
             print "{0} : insert_stream_thread {1}".format(datetime.now().strftime("%c"), value["id"])
             tmp = self.is_in_mq(value["id"])
-            if not tmp:
+            if tmp == False:
                 self.add_to_queue(value["id"])
             tmptmp = self.stream_threads.update({'id': value["id"]}, value, upsert=True)
             return tmp

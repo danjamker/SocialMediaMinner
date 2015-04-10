@@ -50,7 +50,7 @@ def mineChan(board, thread):
             db.insert_post(pp)
         print "{0} : Attempting to remove: {1} from MQ on mongo".format(datetime.now().strftime("%c"), str(thread)+":"+str(board))
 
-        #db.remove_from_queue(str(thread)+":"+str(board))
+        db.remove_from_queue(str(thread)+":"+str(board))
 
     except Exception, e:
         print e

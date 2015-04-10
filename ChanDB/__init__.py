@@ -12,18 +12,18 @@ class ChanDB:
 
         #Store for all the comments that are mined
         self.post = self.db.post
-        self.post.ensure_index('lancs_id', unique=True)
+        self.post.create_index('lancs_id', unique=True)
 
         #List of what currently in the messaging queue for comment mining
         self.mq = self.db.mq
 
         #list of history threads mined
         self.board = self.db.board
-        self.board.ensure_index('id', unique=True)
+        self.board.create_index('id', unique=True)
 
         #Store for all the comments that are mined
         self.thread = self.db.thread
-        self.thread.ensure_index('id', unique=True)
+        self.thread.create_index('id', unique=True)
 
 
     def insert_post(self, value):
@@ -50,6 +50,8 @@ class ChanDB:
         try:
 
             self.mq.remove({'id': thread_id})
+            print "{0} : Removing from queue: {1} id: {2}".format(datetime.now().strftime("%c"),
+
         except Exception as x:
             print "{0} : Unexpected error DB.py-remove_from_queue: {1} id: {2}".format(datetime.now().strftime("%c"),
                                                                                        x.args, thread_id)
