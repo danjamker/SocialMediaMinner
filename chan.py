@@ -25,7 +25,7 @@ class main:
                     for tid in thread_ids:
                         self.db.insert_to_mq(str(tid)+":"+str(b["board"]))
                         mineChan.delay(b["board"], tid)
-
+                    time.sleep(10)
         except Exception as e:
             print "{0} : Unexpected error GetAllComment.py-start: {1}".format(datetime.now().strftime("%c"), e.args)
 
