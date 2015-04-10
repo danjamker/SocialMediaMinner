@@ -23,8 +23,8 @@ class main:
                     board = basc_py4chan.Board(b["board"])
                     thread_ids = board.get_all_thread_ids()
                     for tid in thread_ids:
-                    self.db.insert_to_mq(str(tid)+":"+str(b["board"]))
-                    mineChan.delay(b["board"], tid)
+                        self.db.insert_to_mq(str(tid)+":"+str(b["board"]))
+                        mineChan.delay(b["board"], tid)
 
         except Exception as e:
             print "{0} : Unexpected error GetAllComment.py-start: {1}".format(datetime.now().strftime("%c"), e.args)
