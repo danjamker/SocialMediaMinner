@@ -17,7 +17,7 @@ RUN service supervisor restart
 RUN pip install -r requirements.txt
 
 
-
+RUN rm ./supervisord.conf
 RUN cp ./supervisord2.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir /var/log/supervisord/
 VOLUME ["/var/log/supervisord/"]
