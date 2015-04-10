@@ -23,9 +23,9 @@ class main:
                 for comment in all_comments:
                     tmp = Tools.serilize(comment.submission)
                     print tmp["id"]
-                    if self.db.insert_stream_thread(tmp) == False:
-                        print "Adding!!!!!!!"
-                        mineThread.delay(tmp["id"])
+                    #if self.db.insert_stream_thread(tmp) == False:
+                    print "Adding!!!!!!!"
+                    mineThread.delay(tmp["id"])
         except Exception as e:
             print "{0} : Unexpected error GetAllComment.py-start: {1}".format(datetime.now().strftime("%c"), e.args)
 
