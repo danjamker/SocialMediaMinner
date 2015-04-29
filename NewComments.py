@@ -5,7 +5,7 @@ from datetime import datetime
 from DB import DB
 from celeryTasks import mineThread
 import urllib2
-
+import time
 class main:
 
     def __init__(self):
@@ -13,21 +13,22 @@ class main:
         self.db = DB()
 
     def start(self):
-        try:
-            user_agent = ("Reddit Mining Lancaster 1.0 by /u/danjamker "
-                      "github.com/danjamker/Reddit/")
+        while True:
+            try:
+                user_agent = ("Reddit Mining Feeder Lancaster 1.0 by /u/danjamker "
+                          "github.com/danjamker/Reddit/")
 
-            r = praw.Reddit(user_agent=user_agent)
-            while self.run:
-                all_comments = r.get_comments('all')
-                for comment in all_comments:
-                    tmp = Tools.serilize(comment.submission)
-                    print tmp["id"]
-                    self.db.insert_stream_thread(tmp)
-                    mineThread.delay(tmp["id"])
-        except Exception as e:
-            print "{0} : Unexpected error GetAllComment.py-start: {1}".format(datetime.now().strftime("%c"), e.args)
-
+                r = praw.Reddit(user_agent=user_agent)
+                while self.run:
+                    all_comments = r.get_comments('all')
+                    for comment in all_comments:
+                        tmp = Tools.serilize(comment.submission)
+                        print tmp["id"]
+                        self.db.insert_stream_thread(tmp)
+                        mineThread.delay(tmp["id"])
+            except Exception as e:
+                print "{0} : Unexpected error GetAllComment.py-start: {1}".format(datetime.now().strftime("%c"), e.args)
+            time.sleep(60)
     def stop(self):
         self.run = False
 
