@@ -1,17 +1,24 @@
 __author__ = 'danielkershaw'
-from celery import Celery
-from DB import DB
-from ChanDB import ChanDB
 from datetime import datetime
-import praw
-import Tools
 import sys
 import urllib2
-import urllib, json
+import urllib
+import json
 
-app = Celery('celeryTasks', backend='amqp://guest:guest@148.88.19.38/', broker='amqp://guest:guest@148.88.19.38/')
+from celery import Celery
+import praw
 
-@app.task(ignore_result=True)
+from DB import DB
+from ChanDB import ChanDB
+import Tools
+
+
+
+#app = Celery('celeryTasks', backend='amqp://guest:guest@148.88.19.38/', broker='amqp://guest:guest@148.88.19.38/')
+celery = Celery('tasks')
+celery.config_from_object('celeryconfig')
+
+@celery.task()
 def mineThread(value):
     db = DB()
     try:
@@ -34,7 +41,7 @@ def mineThread(value):
         print "{0} : Unexpected error Comment.py-download: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], value)
         raise
 
-@app.task(ignore_result=True)
+@celery.task()
 def mineChan(board, thread):
     try:
         db = ChanDB()
@@ -54,8 +61,8 @@ def mineChan(board, thread):
 
     except Exception, e:
         print e
-        print "{0} : Unexpected error celeryTasks.py-mineChan: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], board+":"+thread)
+        print "{0} : Unexpected error tasks.py-mineChan: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], board+":"+thread)
         raise
 
 if __name__ == '__main__':
-    app.worker_main()
+    celery.worker_main()

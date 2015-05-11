@@ -1,7 +1,10 @@
 __author__ = 'danielkershaw'
-from ChanDB import ChanDB
 from pprint import pprint
-from celeryTasks import mineChan
+
+from ChanDB import ChanDB
+from tasks import mineChan
+
+
 class main:
 
     def __init__(self):

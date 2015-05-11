@@ -1,11 +1,16 @@
 __author__ = 'danielkershaw'
 
 from datetime import datetime
-from ChanDB import ChanDB
-import basc_py4chan
-import urllib, json
-from celeryTasks import mineChan
+import urllib
+import json
 import time
+
+import basc_py4chan
+
+from ChanDB import ChanDB
+from tasks import mineChan
+
+
 class main:
 
     def __init__(self):

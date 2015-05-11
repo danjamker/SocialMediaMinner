@@ -1,11 +1,13 @@
 __author__ = 'danielkershaw'
-import praw
-import Tools
 from datetime import datetime
-from DB import DB
-from celeryTasks import mineThread
-import urllib2
 import time
+
+import praw
+
+from DB import DB
+from tasks import mineThread
+
+
 class main:
 
     def __init__(self):
@@ -22,7 +24,7 @@ class main:
                 while self.run:
                     all_comments = r.get_comments('all')
                     for comment in all_comments:
-                        tmp = Tools.serilize(comment.submission)
+                        tmp = RedditMinner2.serilize(comment.submission)
                         print tmp["id"]
                         self.db.insert_stream_thread(tmp)
                         mineThread.delay(tmp["id"])
