@@ -1,8 +1,9 @@
+from requests import HTTPError
+
 __author__ = 'danielkershaw'
 from datetime import datetime
 import sys
-import urllib2
-import urllib
+from urllib.request import urlopen
 import json
 
 from celery import Celery
@@ -11,20 +12,23 @@ import praw
 from DB import DB
 from ChanDB import ChanDB
 import Tools
+import socket
 
+from celery.utils.log import get_task_logger
 
+BROKER_URL = 'mongodb://192.168.99.100:32771/jobs'
 
-#app = Celery('celeryTasks', backend='amqp://guest:guest@148.88.19.38/', broker='amqp://guest:guest@148.88.19.38/')
-celery = Celery('tasks')
+celery = Celery('tasks', broker=BROKER_URL)
 celery.config_from_object('celeryconfig')
+logger = get_task_logger(__name__)
 
-@celery.task()
-def mineThread(value):
+@celery.task(bind=True, default_retry_delay=30 * 60, max_retries=5,name='tasks.mineReddit')
+def mineReddit(self, value):
     db = DB()
     try:
-        print "{0} : download {1}".format(datetime.now().strftime("%c"), value)
-        user_agent = ("Reddit Mining Lancaster 1.0 by /u/danjamker "
-                  "github.com/danjamker/Reddit/")
+        logger.info("{0} : download {1}".format(datetime.now().strftime("%c"), value))
+        user_agent = ("Reddit Mining Lancaster 1.0 by /u/danjamker on IP:"+ socket.gethostbyname(socket.gethostname())+
+                  " github.com/danjamker/Reddit/")
 
         r = praw.Reddit(user_agent=user_agent)
         submission = r.get_submission(submission_id=value)
@@ -33,36 +37,35 @@ def mineThread(value):
         for comment in flat_comments:
             tmp = Tools.serlizeComment(comment)
             db.insert_comment(tmp)
-        #db.remove_from_queue(value)
-    except urllib2.HTTPError, err:
-        mineThread.retry(args=[value], exc=err, countdown=30)
-    except Exception,   e:
-        print e
-        print "{0} : Unexpected error Comment.py-download: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], value)
-        raise
+    except HTTPError as err:
+        self.retry(exc=err)
+        logger.error(err)
+        raise err
+    except Exception as e:
+        logger.error(e)
+        raise e
 
-@celery.task()
-def mineChan(board, thread):
+@celery.task(bind=True, default_retry_delay=300, max_retries=5,name='tasks.mineChan')
+def mineChan(self, board, thread):
     try:
-        db = ChanDB()
-
+        db = ChanDB("mongodb://192.168.99.100:32771/")
         url = "https://a.4cdn.org/"+str(board)+"/thread/"+str(thread)+".json"
-        response = urllib.urlopen(url);
-        data = json.loads(response.read())
+        response = urlopen(url).read().decode('utf8')
+        data = json.loads(response)
 
-        # information from the OP
         for pp in data["posts"]:
-            pp["lancs_id"] = str(board)+":"+str(thread)+":"+str(pp["no"])
-            print pp
+            pp["mined_time"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            pp["board_name"] = board
+            pp["thread_id"] = thread
+            pp["post_id"] = pp["no"]
+            logger.info(pp)
             db.insert_post(pp)
-        print "{0} : Attempting to remove: {1} from MQ on mongo".format(datetime.now().strftime("%c"), str(thread)+":"+str(board))
-
-        db.remove_from_queue(str(thread)+":"+str(board))
-
-    except Exception, e:
-        print e
-        print "{0} : Unexpected error tasks.py-mineChan: {1} body: {2}".format(datetime.now().strftime("%c"), sys.exc_info()[0], board+":"+thread)
-        raise
+        logger.info("{0} : Attempting to remove: {1} from MQ on mongo".format(datetime.now().strftime("%c"), str(thread)+":"+str(board)))
+        db.remove_from_mq(str(thread)+":"+str(board))
+    except Exception as e:
+    #        self.retry(exc=e)
+        logger.error(e)
+        raise e
 
 if __name__ == '__main__':
     celery.worker_main()

@@ -1,10 +1,17 @@
 import sys
 
 sys.path.append('.')
-BROKER_URL = "amqp://guest:guest@148.88.19.38/"
-CELERY_DEPLOY_PATH = "./sm-minner"
-#CELERY_DEPLOY_HOSTS = "pi@10.0.1.17"
-CELERY_DEPLOY_HOSTS = "danielkershaw@148.88.227.198"
-CELERY_RESULT_BACKEND = "amqp"
-PIP_PACKAGES = ["requests","pymongo","superlance","basc-py4chan","flower","Celery","supervisor","praw"]
-CELERY_IMPORTS = ("tasks","ChanDB","DB","Tools")
+CELERY_RESULT_BACKEND = "mongodb"
+CELERY_MONGODB_BACKEND_SETTINGS = {
+    "host": "192.168.99.100",
+    "port": 32771,
+    "database": "jobs",
+    "taskmeta_collection": "socialmediaminer",
+}
+CELERY_ENABLE_UTC=True
+CELERYD_CONCURRENCY=1
+CELERYD_USER="celery"
+CELERYD_GROUP="celery"
+CELERY_CREATE_DIRS=1
+CELERY_DISABLE_RATE_LIMITS = True
+CELERY_ROUTES = {'taskd.mineChan': {'queue': 'chan'},'taskd.mineReddit': {'queue': 'reddit'}}

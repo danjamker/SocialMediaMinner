@@ -1,8 +1,5 @@
-pymongo
-praw
-supervisor
-Celery
-flower
-basc-py4chan
-superlance
-celerydeploy
+pymongo==3.1
+praw==3.3.0
+Celery==3.1.19
+flower==0.8.3
+basc-py4chan==0.6.0
