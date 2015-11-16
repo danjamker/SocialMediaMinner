@@ -1,3 +1,5 @@
+import celeryconfig
+
 __author__ = 'danielkershaw'
 
 from datetime import datetime
@@ -8,7 +10,6 @@ import logging
 import Tools
 import praw
 import basc_py4chan
-import codecs
 
 from DB import DB
 from ChanDB import ChanDB
@@ -19,7 +20,7 @@ class RedditMinner:
 
     def __init__(self):
         self.run = True
-        self.db = DB("mongodb://192.168.99.100:32771/")
+        self.db = DB(celeryconfig.DATABASE)
         self.logger = logging.getLogger('4 Chan Minner')
         self.logger.info('Starting 4Chan manner')
 
@@ -48,7 +49,7 @@ class ChanMinner:
 
     def __init__(self):
         self.run = True
-        self.db = ChanDB("mongodb://192.168.99.100:32771/")
+        self.db = ChanDB(celeryconfig.DATABASE)
         self.logger = logging.getLogger('4 Chan Minner')
         self.logger.info('Starting 4Chan manner')
 

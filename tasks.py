@@ -16,15 +16,14 @@ import socket
 
 from celery.utils.log import get_task_logger
 
-BROKER_URL = 'mongodb://192.168.99.100:32771/jobs'
 
-celery = Celery('tasks', broker=BROKER_URL)
+celery = Celery('tasks')
 celery.config_from_object('celeryconfig')
 logger = get_task_logger(__name__)
 
 @celery.task(bind=True, default_retry_delay=30 * 60, max_retries=5,name='tasks.mineReddit')
 def mineReddit(self, value):
-    db = DB()
+    db = DB(celery.conf.DATABASE)
     try:
         logger.info("{0} : download {1}".format(datetime.now().strftime("%c"), value))
         user_agent = ("Reddit Mining Lancaster 1.0 by /u/danjamker on IP:"+ socket.gethostbyname(socket.gethostname())+
@@ -48,7 +47,7 @@ def mineReddit(self, value):
 @celery.task(bind=True, default_retry_delay=300, max_retries=5,name='tasks.mineChan')
 def mineChan(self, board, thread):
     try:
-        db = ChanDB("mongodb://192.168.99.100:32771/")
+        db = ChanDB(celery.conf.DATABASE)
         url = "https://a.4cdn.org/"+str(board)+"/thread/"+str(thread)+".json"
         response = urlopen(url).read().decode('utf8')
         data = json.loads(response)
